@@ -3,6 +3,7 @@ package bootstrap
 import (
 	"errors"
 	"fmt"
+	"goblog/app/models/user"
 	"goblog/pkg/config"
 	"goblog/pkg/database"
 	"time"
@@ -40,4 +41,6 @@ func SetupDB() {
 	database.SQLDB.SetMaxIdleConns(config.GetInt("database.max_idle_connections"))
 	database.SQLDB.SetMaxOpenConns(config.GetInt("database.max_open_connections"))
 	database.SQLDB.SetConnMaxLifetime(time.Duration(config.GetInt("database.max_connection_lifetime")) * time.Second)
+
+	database.DB.AutoMigrate(&user.User{})
 }
