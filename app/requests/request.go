@@ -11,6 +11,7 @@ import (
 type ValidateFunc func(data interface{}, c *gin.Context) map[string][]string
 
 func Validate(c *gin.Context, obj interface{}, handler ValidateFunc) bool {
+	// ShouldBind 解析請求參數，支援 JSON & Form 表單 & Query
 	if err := c.ShouldBind(obj); err != nil {
 		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{
 			"message": "請求解析錯誤，請確認請求格式是否正確。上傳文件請使用 multipart/form-data 格式, 參數請使用 JSON 格式。",
