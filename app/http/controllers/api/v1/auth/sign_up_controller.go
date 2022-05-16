@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"fmt"
 	v1 "goblog/app/http/controllers/api/v1"
 	"goblog/app/models/user"
 	"goblog/app/requests"
@@ -18,20 +17,7 @@ func (sc *SignUpController) IsPhoneExist(c *gin.Context) {
 
 	request := requests.SignUpPhoneExistRequest{}
 
-	if err := c.ShouldBindJSON(&request); err != nil {
-		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{
-			"error": err.Error(),
-		})
-		fmt.Println(err.Error())
-		return
-	}
-
-	errs := requests.ValidateSignUpPhoneExist(&request, c)
-
-	if len(errs) > 0 {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-			"errors": errs,
-		})
+	if ok := requests.Validate(c, &request, requests.ValidateSignUpPhoneExist); !ok {
 		return
 	}
 
@@ -44,19 +30,7 @@ func (sc *SignUpController) IsPhoneExist(c *gin.Context) {
 func (sc *SignUpController) IsEmailExist(c *gin.Context) {
 	request := requests.SignUpEmailExistRequest{}
 
-	if err := c.ShouldBindJSON(&request); err != nil {
-		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{
-			"error": err.Error(),
-		})
-		fmt.Println(err.Error())
-		return
-	}
-
-	errs := requests.ValidateSignUpEmailExist(&request, c)
-	if len(errs) > 0 {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-			"errors": errs,
-		})
+	if ok := requests.Validate(c, &request, requests.ValidateSignUpEmailExist); !ok {
 		return
 	}
 

@@ -25,14 +25,7 @@ func ValidateSignUpPhoneExist(data interface{}, c *gin.Context) map[string][]str
 		},
 	}
 
-	opts := govalidator.Options{
-		TagIdentifier: "validate",
-		Data:          data,
-		Rules:         rules,
-		Messages:      messages,
-	}
-
-	return govalidator.New(opts).ValidateStruct()
+	return validate(data, rules, messages)
 }
 
 func ValidateSignUpEmailExist(data interface{}, c *gin.Context) map[string][]string {
@@ -47,12 +40,5 @@ func ValidateSignUpEmailExist(data interface{}, c *gin.Context) map[string][]str
 		},
 	}
 
-	opts := govalidator.Options{
-		TagIdentifier: "validate",
-		Data:          data,
-		Rules:         rules,
-		Messages:      messages,
-	}
-
-	return govalidator.New(opts).ValidateStruct()
+	return validate(data, rules, messages)
 }
