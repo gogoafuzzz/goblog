@@ -10,11 +10,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type SignupController struct {
+type SignUpController struct {
 	v1.BaseApiController
 }
 
-func (sc *SignupController) IsPhoneExist(c *gin.Context) {
+func (sc *SignUpController) IsPhoneExist(c *gin.Context) {
 
 	request := requests.SignUpPhoneExistRequest{}
 
@@ -39,4 +39,28 @@ func (sc *SignupController) IsPhoneExist(c *gin.Context) {
 		"exist": user.IsPhoneExist(request.Phone),
 	})
 
+}
+
+func (sc *SignUpController) IsEmailExist(c *gin.Context) {
+	request := requests.SignUpEmailExistRequest{}
+
+	if err := c.ShouldBindJSON(&request); err != nil {
+		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{
+			"error": err.Error(),
+		})
+		fmt.Println(err.Error())
+		return
+	}
+
+	errs := requests.ValidateSignUpEmailExist(&request, c)
+	if len(errs) > 0 {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"errors": errs,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"exist": user.IsEmailExist(request.Email),
+	})
 }
